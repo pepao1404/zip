@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地名検索！</title>
+<style>
+    .att{
+        color:red;
+        font-size: 20px;
+    }
+</style>
+</head>
+<body>
+<h1>地名検索ツール　ver1.0</h1>
+    <input type=number name="zip" id="zipcd">
+    <input type="submit" value="郵便番号を検索する！" id="send">
+<span>※ハイフン抜きで入力してください！<span>
+<div id="intro">
+    <p>県名：<span class="pref hide"></span></p>
+    <p>市名：<span class="city hide"></span></p>
+    <p>字：<span class="town hide"></span></p>
+</div>
+<div class="box2"></div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$('#send').on('click',function(){
+    var cd = $('#zipcd').val();
+    var url = "https://api.zipaddress.net/?zipcode=" + cd;
+    $.getJSON(url,function(res){
+        if(res.code==200){
+            $('.pref').text(res.data.pref);
+            $('.city').text(res.data.city);
+            $('.town').text(res.data.town);
+            $('.att').remove();
+        }else{
+            $('.hide').empty();
+            $('#intro').before("<p class='att'>郵便番号が間違っています！</p>")
+        }
+    }).fail(function(e){
+        $('.box2').text("読み込みに失敗しました！");
+    })
+});
+</script>
+</body>
+</html>
